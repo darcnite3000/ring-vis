@@ -1,0 +1,24 @@
+{
+  "name": "ring-vis",
+  "version": "1.0.0",
+  "description": "Ring Visualisation",
+  "main": "src/index.js",
+  "author": "Tristan Smith <darcnite3000@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "dev": "poi",
+    "build": "poi build"
+  },
+  "devDependencies": {
+    "poi": "^10.2.7",
+    "postcss-font-magician": "^2.2.1"
+  },
+  "dependencies": {
+    "react": "^16.4.0",
+    "react-dom": "^16.4.0"
+  },
+  "prettier": {
+    "semi": false,
+    "singleQuote": true
+  }
+}
