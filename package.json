@@ -10,6 +10,7 @@
     "build": "poi build"
   },
   "devDependencies": {
+    "gh-pages": "^1.2.0",
     "poi": "^10.2.7",
     "postcss-font-magician": "^2.2.1"
   },
