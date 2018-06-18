@@ -1,19 +1,40 @@
 import React, { Component } from 'react'
 import { Gem } from './Gem'
 import { Slot } from './Slot'
-import {GemPreview} from './GemPreview'
+import { GemPreview } from './GemPreview'
 
-function generateSlots(size) {
-  let slots = []
-  for (let i = 0; i < size; i++) {
-    slots.push({ size: 1, type: 'Round' })
+const gemTypes = [
+  {size: 1, type: 'Round'},
+  {size: 2, type: 'Baguette'}
+]
+
+function getSlotsSize(slots = []) {
+  return slots.reduce((l, s) => l + s.size, 0)
+}
+
+function generateSlots(size, slots = []) {
+  const slotSize = getSlotsSize(slots)
+  if (size === slotSize) return slots
+  let newSlots = []
+  let newSlotSize = 0
+  let index = 0
+  while (newSlotSize < size) {
+    if (slots[index] && size - slots[index].size - newSlotSize >= 0) {
+      newSlots.push(slots[index])
+      newSlotSize = newSlotSize + slots[index].size
+      index = index + 1
+    } else {
+      newSlots.push({ size: 1, type: 'Round' })
+      newSlotSize = newSlotSize + 1
+    }
   }
-  return slots
+  return newSlots
 }
 
 export class App extends Component {
   state = {
-    slots: generateSlots(12)
+    slots: generateSlots(12),
+    size: 12
   }
   updateSlot = (pos, content) => {
     const slots = this.state.slots
@@ -43,7 +64,7 @@ export class App extends Component {
         if (dropSize < content.size) {
           const newSlots = [
             ...slots.slice(0, pos),
-            content,
+            newContent,
             ...slots.slice(pos + content.size)
           ]
           this.setState({
@@ -68,13 +89,18 @@ export class App extends Component {
     }
   }
   setRingSize(size) {
-    this.setState({ slots: generateSlots(size) })
+    this.setState(({ slots }) => ({ size, slots: generateSlots(size, slots) }))
+  }
+  onChangeRingSize = e => {
+    const size = e.target.value
+    this.setRingSize(size)
   }
   render() {
-    const slots = this.state.slots
+    const { size, slots } = this.state
     return (
       <div>
         <h1>Ring Visualiser</h1>
+
         <div style={{ display: 'flex' }}>
           {slots.map((content, i) => (
             <Slot
@@ -87,19 +113,28 @@ export class App extends Component {
           ))}
         </div>
         <div>
+          <h2>Band</h2>
+          <div>
+            <label htmlFor="band-size">Band Size:</label>
+            <select id="band-size" value={size} onChange={this.onChangeRingSize}>
+              {[12, 14, 16, 18, 20].map((v, i) => (
+                <option key={i} value={v}>
+                  {v}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+        <div>
           <h2>Gems</h2>
           <ul>
-            <li style={{ display: 'flex', alignItems: 'center' }}>
-              <Gem size={2} type="Baguette" updateSlot={this.updateSlot} />
-              Baguette Style
-            </li>
-            <li style={{ display: 'flex', alignItems: 'center' }}>
-              <Gem size={1} type="Round" updateSlot={this.updateSlot} />
-              Round Style
-            </li>
+            {gemTypes.map(({size,type})=><li style={{ display: 'flex', alignItems: 'center' }}>
+              <Gem key={type} size={size} type={type} updateSlot={this.updateSlot} />
+              {type} Style
+            </li>)}
           </ul>
         </div>
-        <GemPreview key="__preview" name="Gem"/>
+        <GemPreview key="__preview" name="Gem" />
       </div>
     )
   }
