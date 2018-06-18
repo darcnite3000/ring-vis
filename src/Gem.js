@@ -18,6 +18,7 @@ import { DragSource } from 'react-dnd'
   },
   (connect, monitor) => ({
     connectDragSource: connect.dragSource(),
+    connectDragPreview: connect.dragPreview(),
     isDragging: monitor.isDragging()
   })
 )
@@ -30,7 +31,14 @@ export class Gem extends Component {
     updateSlot: () => {}
   }
   render() {
-    const { connectDragSource, size, type, isDragging, style } = this.props
+    const {
+      connectDragPreview,
+      connectDragSource,
+      size,
+      type,
+      isDragging,
+      style
+    } = this.props
     const gemStyle = {
       opacity: isDragging ? 0.5 : 1,
       width: size * 10,
@@ -38,6 +46,6 @@ export class Gem extends Component {
       backgroundColor: type == 'Round' ? 'blue' : 'brown',
       ...style
     }
-    return connectDragSource(<div style={gemStyle} />)
+    return connectDragPreview(connectDragSource(<div style={gemStyle} />))
   }
 }
