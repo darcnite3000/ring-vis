@@ -18,6 +18,7 @@ import { DragSource } from 'react-dnd'
   },
   (connect, monitor) => ({
     connectDragSource: connect.dragSource(),
+    connectDragPreview: connect.dragPreview(),
     isDragging: monitor.isDragging()
   })
 )
@@ -38,6 +39,6 @@ export class Gem extends Component {
       backgroundColor: type == 'Round' ? 'blue' : 'brown',
       ...style
     }
-    return connectDragSource(<div style={gemStyle} />)
+    return connectDragPreview(connectDragSource(<div style={gemStyle} />))
   }
 }
