@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Gem } from './Gem'
 import { Slot } from './Slot'
+import {GemPreview} from './GemPreview'
 
 function generateSlots(size) {
   let slots = []
@@ -98,6 +99,7 @@ export class App extends Component {
             </li>
           </ul>
         </div>
+        <GemPreview key="__preview" name="Gem"/>
       </div>
     )
   }
