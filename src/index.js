@@ -1,11 +1,11 @@
 import React, { Component, createContext, Fragment } from 'react'
 import { render } from 'react-dom'
 import { DragDropContextProvider } from 'react-dnd'
-import HTML5Backend from 'react-dnd-html5-backend'
+import { default as TouchBackend } from 'react-dnd-touch-backend'
 import { App } from './App'
 
 render(
-  <DragDropContextProvider backend={HTML5Backend}>
+  <DragDropContextProvider backend={TouchBackend({ enableMouseEvents: true })}>
     <App />
   </DragDropContextProvider>,
   document.getElementById('app')
