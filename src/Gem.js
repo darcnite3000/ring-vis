@@ -4,8 +4,8 @@ import { DragSource } from 'react-dnd'
 @DragSource(
   'GEM',
   {
-    beginDrag({ type, size }) {
-      return { type, size }
+    beginDrag({ type, size, pos }) {
+      return { type, size, pos }
     },
     endDrag(props, monitor) {
       const item = monitor.getItem()
@@ -25,14 +25,19 @@ export class Gem extends Component {
   static defaultProps = {
     size: 1,
     type: 'round',
+    pos: null,
+    style: {},
     updateSlot: () => {}
   }
   render() {
-    const { connectDragSource, size, type } = this.props
-    return connectDragSource(
-      <pre>
-        <code>{JSON.stringify({ size, type }, null, 2)}</code>
-      </pre>
-    )
+    const { connectDragSource, size, type, isDragging, style } = this.props
+    const gemStyle = {
+      opacity: isDragging ? 0.5 : 1,
+      width: size * 10,
+      height: 10,
+      backgroundColor: type == 'Round' ? 'blue' : 'brown',
+      ...style
+    }
+    return connectDragSource(<div style={gemStyle} />)
   }
 }

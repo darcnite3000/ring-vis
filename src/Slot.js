@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { DropTarget } from 'react-dnd'
+import { Gem } from './Gem'
 
 @DropTarget(
   'GEM',
@@ -9,6 +10,7 @@ import { DropTarget } from 'react-dnd'
     },
     canDrop({ pos, slots, content }, monitor) {
       const item = monitor.getItem()
+      if (item.pos) return true
       const contentSize = content.size || 1
       if (contentSize === item.size) return true
       if (contentSize > item.size) return true
@@ -33,12 +35,25 @@ export class Slot extends Component {
     updateSlot: () => {}
   }
   render() {
-    const { content, connectDropTarget, isOver, canDrop } = this.props
+    const {
+      content,
+      connectDropTarget,
+      isOver,
+      canDrop,
+      pos,
+      updateSlot
+    } = this.props
     const validDrop = isOver && canDrop
-    const backgroundColor = validDrop ? 'green' : 'gray'
+    const slotStyle = {
+      backgroundColor: validDrop ? 'green' : 'gray',
+      border: '1px solid black'
+    }
+    const gemStyle = {
+      opacity: isOver ? 0.5 : 1
+    }
     return connectDropTarget(
-      <pre style={{ backgroundColor }}>
-        <code>{JSON.stringify({ ...content }, null, 2)}</code>
+      <pre style={slotStyle}>
+        <Gem {...content} pos={pos} updateSlot={updateSlot} style={gemStyle} />
       </pre>
     )
   }
